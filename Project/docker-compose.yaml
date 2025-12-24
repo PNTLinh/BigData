@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  # 1. ZOOKEEPER (Quản lý Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      # Giới hạn RAM Java
+      KAFKA_OPTS: "-Xmx256M -Xms256M"
+    ports:
+      - "2181:2181"
+    mem_limit: 512m
+
+  # 2. KAFKA (Data Collection)
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Giới hạn RAM Java (Quan trọng)
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+    mem_limit: 1g
+
+  # 3. HDFS NAMENODE (Batch Storage - Master)
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    mem_limit: 1g
+
+  # 4. HDFS DATANODE (Batch Storage - Slave)
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    depends_on:
+      - namenode
+    env_file:
+      - ./hadoop.env
+    mem_limit: 1g
+
+  # 5. SPARK MASTER (Processing Engine) - dùng BDE thay cho Bitnami
+  spark-master:
+    image: bde2020/spark-master:3.0.1-hadoop3.2
+    container_name: spark-master
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+    ports:
+      - "8080:8080" # Web UI
+      - "7077:7077"
+    mem_limit: 1g
+
+  # 6. SPARK WORKER (Processing Engine) - dùng BDE thay cho Bitnami
+  spark-worker:
+    image: bde2020/spark-worker:3.0.1-hadoop3.2
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1G  # Cấp cứng 1GB cho việc xử lý
+      - SPARK_WORKER_CORES=1
+    mem_limit: 1.5g
+
+  # 7. ELASTICSEARCH (Serving Layer & Indexing)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node # Chạy 1 node tiết kiệm RAM
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Chỉ cho phép dùng 512MB RAM
+    ports:
+      - "9200:9200"
+    mem_limit: 1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  # 8. KIBANA (Visualization)
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.13
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    mem_limit: 1g

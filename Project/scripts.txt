@@ -1,0 +1,19 @@
+python --version
+git --version
+pip --version
+pip install virtualenv pandas numpy matplotlib seaborn jupyter notebook
+
+python -m venv venv
+venv\Scripts\activate
+
+mkdir data\raw, data\processed
+mkdir notebooks
+mkdir src\ingestion, src\processing, src\analysis, src\dashboard
+mkdir models, reports, config
+
+pip install -r requirements.txt
+
+Tao file C:\Users\ntlinh\.kaggle\kaggle.json
+{"username":"pntlinh2204","key":"KGAT_e4ee8d44cd57a900a76d7c56a4e19f24"}
+
+python src/ingestion/download_data.py
