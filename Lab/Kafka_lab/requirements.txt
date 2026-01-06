@@ -1,0 +1,30 @@
+# Kafka Python client
+kafka-python==2.0.2
+confluent-kafka>=2.1.0
+
+# Data processing
+pandas
+numpy
+
+# Visualization
+matplotlib
+seaborn
+plotly
+
+# Utilities
+python-dotenv
+tqdm
+requests
+
+# JSON and serialization
+# CHANGED: avro-python3 is deprecated. Using official avro library.
+avro>=1.11.0
+fastavro>=1.8.0
+
+# Redis for caching
+redis
+
+# Jupyter
+jupyter
+jupyterlab
+ipywidgets

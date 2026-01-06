@@ -1,0 +1,29 @@
+import pyspark.sql.types as T
+
+# 1. Cấu hình kết nối Kafka
+KAFKA_ADDRESS = '35.220.200.137'
+BOOTSTRAP_SERVERS = [f'{KAFKA_ADDRESS}:9092'] # Có thể thêm :9093 nếu Linh cấu hình nhiều broker
+
+# 2. Cấu hình Topics
+# Topic chứa luồng giao dịch thô từ Producer
+PRODUCE_TOPIC_FRAUD_CSV = 'fraud_transactions'
+CONSUME_TOPIC_FRAUD_CSV = 'fraud_transactions'
+
+# Topic chứa kết quả thống kê gian lận theo cửa sổ thời gian (Windowed)
+TOPIC_WINDOWED_FRAUD_COUNT = 'fraud_counts_windowed'
+
+# 3. Định nghĩa Schema cho dữ liệu gian lận tài chính
+# Đảm bảo khớp chính xác với bộ dữ liệu Paysim Linh đang dùng
+FRAUD_SCHEMA = T.StructType([
+    T.StructField("step", T.IntegerType()),           # Bước thời gian (giờ)
+    T.StructField("type", T.StringType()),           # Loại giao dịch (TRANSFER, CASH_OUT, ...)
+    T.StructField("amount", T.FloatType()),          # Số tiền giao dịch
+    T.StructField("nameOrig", T.StringType()),       # ID tài khoản nguồn
+    T.StructField("oldbalanceOrg", T.FloatType()),   # Số dư cũ tài khoản nguồn
+    T.StructField("newbalanceOrig", T.FloatType()),   # Số dư mới tài khoản nguồn
+    T.StructField("nameDest", T.StringType()),       # ID tài khoản đích
+    T.StructField("oldbalanceDest", T.FloatType()),  # Số dư cũ tài khoản đích
+    T.StructField("newbalanceDest", T.FloatType()),  # Số dư mới tài khoản đích
+    T.StructField("isFraud", T.IntegerType()),       # Nhãn gian lận (0/1)
+    T.StructField("isFlaggedFraud", T.IntegerType()) # Gắn nhãn gian lận bởi hệ thống cũ (0/1)
+])

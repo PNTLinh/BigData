@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data from application database
+    schema: raw
+    tables:
+      - name: customers
+        description: Raw customer data
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+        columns:
+          - name: customer_id
+            description: Primary key for customers
+          - name: email
+            description: Customer email address
+      
+      - name: orders
+        description: Raw order data
+        freshness:
+          warn_after: {count: 6, period: hour}
+          error_after: {count: 12, period: hour}
+        columns:
+          - name: order_id
+            description: Primary key for orders
+          - name: customer_id
+            description: Foreign key to customers table
+          - name: total_amount
+            description: Total order amount
+      
+      - name: products
+        description: Raw product data
+      
+      - name: order_items
+        description: Raw order items data
+

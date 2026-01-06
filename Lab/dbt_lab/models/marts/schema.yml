@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: customer_orders
+    description: Customer dimension with order aggregates
+    columns:
+      - name: customer_id
+        description: Primary key for customers
+        tests:
+          - unique
+          - not_null
+      
+      - name: email
+        description: Customer email address
+        tests:
+          - not_null
+      
+      - name: order_count
+        description: Total number of completed orders
+        tests:
+          - not_null
+      
+      - name: lifetime_value
+        description: Total revenue from customer
+        tests:
+          - not_null
+

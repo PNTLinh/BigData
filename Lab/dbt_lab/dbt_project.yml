@@ -1,0 +1,43 @@
+name: 'dbt_lab'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'dbt_lab'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  dbt_lab:
+    # Staging models
+    staging:
+      +materialized: view
+      +schema: staging
+    
+    # Intermediate models
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    
+    # Marts (final models)
+    marts:
+      +materialized: table
+      +schema: marts
+
+# Variables
+vars:
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+

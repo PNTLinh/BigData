@@ -1,0 +1,25 @@
+# dbt Core và PostgreSQL adapter
+dbt-core==1.7.0
+dbt-postgres==1.7.0
+
+# Data processing
+pandas==2.1.0
+numpy==1.24.3
+
+# Database connections
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.23
+
+# Jupyter và notebooks
+jupyter==1.0.0
+ipykernel==6.25.2
+notebook==7.0.6
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Testing
+pytest==7.4.2
+pytest-dbt==0.1.0
+

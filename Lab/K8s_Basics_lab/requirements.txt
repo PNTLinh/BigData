@@ -1,0 +1,18 @@
+# Kubernetes Basics Lab - Python Dependencies
+
+# Kubernetes Python client
+kubernetes==28.1.0
+
+# Jupyter và notebooks
+jupyter==1.0.0
+ipykernel==6.25.2
+notebook==7.0.6
+
+# Utilities
+pyyaml==6.0.1
+requests==2.31.0
+
+# For testing và examples
+flask==3.0.0
+gunicorn==21.2.0
+

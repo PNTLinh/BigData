@@ -1,0 +1,37 @@
+# Airflow Lab Requirements
+# Apache Airflow với các providers và dependencies cần thiết
+
+# Core Airflow (sẽ được cài trong Docker, nhưng cần cho local development)
+apache-airflow[postgres,celery]==3.1.1
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Kafka integration
+kafka-python>=2.0.2
+confluent-kafka>=2.3.0
+
+# Spark integration (optional, for advanced labs)
+pyspark>=3.5.0
+
+# Database connectors
+psycopg2-binary>=2.9.0
+sqlalchemy>=2.0.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Jupyter notebooks
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipykernel>=6.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Utilities
+python-dotenv>=1.0.0
+pendulum>=3.0.0
+

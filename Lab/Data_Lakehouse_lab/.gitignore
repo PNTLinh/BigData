@@ -1,0 +1,53 @@
+# Airflow
+logs/
+plugins/__pycache__/
+airflow.db
+
+# Great Expectations
+great_expectations/
+uncommitted/
+.great_expectations/
+
+# dbt
+target/
+dbt_packages/
+profiles.yml
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Data
+*.parquet
+*.csv
+!data/sample_*.csv
+
